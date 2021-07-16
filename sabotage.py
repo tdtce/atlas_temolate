@@ -5,7 +5,8 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 
-from utils import frame_id_from_filename, VideoWriter, SabotageConfig, DetectionContainer
+from utils import frame_id_from_filename, SabotageConfig, DetectionContainer
+from datetime import datetime
 
 
 class DescriptorHistory:
@@ -230,6 +231,7 @@ def demo_sabotage(
         containers = [
             DetectionContainer.from_image_file(file) for file in all_frames[file_id : file_id + chunk_size]
         ]
+
         containers = sabotage.process_container_list(containers)
         for frame_id, container in enumerate(containers):
             if container.sabotage_status == 2:
@@ -239,6 +241,8 @@ def demo_sabotage(
 
 
 if __name__ == "__main__":
+    start_time = datetime.now()
+
     demo_sabotage(
         dirpath=Path("data/vid/"),
         ref_img_path=Path("data/vid/vid_1.jpg"),
@@ -247,3 +251,6 @@ if __name__ == "__main__":
         step=1,
         chunk_size=50,
     )
+    # do your work here
+    end_time = datetime.now()
+    print('Duration: {}'.format(end_time - start_time))
